@@ -88,9 +88,9 @@ class Engine(object):
         big_small = -1 if maximising else 1
         if win[0]:
             if win[1] == current_colour:
-                return float(2) * big_small
+                return float(10) * big_small
             else:
-                return  float(2) * big_small
+                return  float(10) * big_small
         if position.is_draw():
             return 0
         return 5 * big_small

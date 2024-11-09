@@ -27,22 +27,15 @@ class Engine(object):
         time_1 = time.time()
         start_move = Move(None, start_position, start_position.check_win()[0], start_position.is_draw(), self.colour)
         self.minimax_alg(start_move, 10, float('-inf'), float('inf'), True)
-        print(f'Minmax completed in {round(time.time() - time_1), 4}')
+        print(f'Minmax completed in {round(time.time() - time_1, 4)}')
 
-        move_list:list[Move] = start_move.parent_of
-        sorted_moves:list[Move] = []
-        for i in range(len(move_list)):
-            ref_move = move_list[0]
-            for j in range(i, len(move_list)):
-                if move_list[j].evaluation < move_list[i].evaluation:
-                    ref_move = move_list[j]
-            move_list.remove(ref_move)
-            sorted_moves.append(ref_move)
+        moves = sorted(start_move.parent_of, key=lambda x: x.evaluation)
 
-        for move in sorted_moves:
-            print(f'The move {move.index} has an evaluation of {move.evaluation} and will be played at {move.index}')
 
-        move_out = sorted_moves[-1]
+        for move in moves:
+            print(f'The move has an evaluation of {move.evaluation} and will be played at {move.index}')
+
+        move_out = moves[-1]
 
         print(f'From {start_position.board} to {move_out.board.board} with piece added at {move_out.index}')
 
@@ -59,7 +52,7 @@ class Engine(object):
 
     def minimax_alg(self, move, depth, alpha, beta, maximising_player):
         if depth == 0 or move.board.check_win()[0] or move.board.is_draw():
-            return self.evaluation(position=move.board, current_colour='green', maximising=maximising_player)
+            return self.evaluation(position=move.board, current_colour='green', maximising=maximising_player, how_early=depth)
         if maximising_player:
             max_evaluation = float('-inf')
             self.gen_legal_moves(move=move, colour='O')
@@ -83,17 +76,21 @@ class Engine(object):
                     break
             return min_evaluation
 
-    def evaluation(self, position, current_colour, maximising):
+    def evaluation(self, position, current_colour, maximising, how_early):
         win = position.check_win()
-        big_small = -1 if maximising else 1
+        big_small = 1 if maximising else -1
+        return_value = 5
         if win[0]:
             if win[1] == current_colour:
-                return float(10) * big_small
+                print('YAY we won')
+                return_value = 100 + how_early
             else:
-                return  float(10) * big_small
+                print("Noo we lost")
+                return_value = -10 - how_early
         if position.is_draw():
-            return 0
-        return 5 * big_small
+            return_value = 0
+        print(return_value, big_small)
+        return return_value * big_small
 
     def set_controller(self, ref_controller):
         self.controller = ref_controller

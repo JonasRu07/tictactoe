@@ -1,45 +1,60 @@
 import tkinter as tk
 
+from PIL import Image, ImageTk
 class GUI(object):
     def __init__(self):
         self.controller = None
 
         self.window = tk.Tk()
-        self.window.geometry('512x512')
+        self.window.geometry('330x220')
         self.window.title('Tic Tac Toe')
-
+        self.window.config(background='#e8d5b5')
         self.images = {
-            'X' : tk.PhotoImage(file='./images/x.png'),
-            'O' : tk.PhotoImage(file='./images/o.png')
-        }
+            'field' : None,
+            'board_frame' : ImageTk.PhotoImage(Image.open('./images/board_frame.png')),
+            'X' : ImageTk.PhotoImage(Image.open('./images/x.png')),
+            'O' : ImageTk.PhotoImage(Image.open('./images/o.png')),
+            'player_vs_player' : ImageTk.PhotoImage(Image.open('./images/player_vs_player.png')),
+            'player_vs_engine' : ImageTk.PhotoImage(Image.open('./images/player_vs_engine.png')),
+            'engine_vs_engine' : ImageTk.PhotoImage(Image.open('./images/engine_vs_engine.png'))
+            }
 
         self.frame_fields = tk.Frame(master=self.window,
-                                     background= '#4b4453')
+                                     background= '#FF00FF',)
         self.frame_fields.place(x=20, y=20, height=180, width=180)
+        self.frame_fields_image = tk.Label(self.frame_fields, image= self.images.get('board_frame'))
+        self.frame_fields_image.pack()
 
         self.list_fields = []
         for i in range(9):
             button = tk.Button(master= self.frame_fields,
-                               background='#005bd3',
-                               activebackground= '#00aec4',
+                               background='#7c7484',
+                               activebackground= '#4c8076',
+                               relief= 'groove',
                                command= lambda index=i : self.button_field_click(index))
             self.list_fields.append(button)
             button.place(x=i%3*60+5, y=i//3*60+5, height=50, width=50)
 
         self.label_current_player = tk.Label(master=self.window,
                                              text='X',
-                                             background='#c11a94')
-        self.label_current_player.place(x=220, y=20, width=60, height=40)
+                                             background='#5C2CAa',
+                                              font= 'Aral, 30')
+        self.label_current_player.place(x=220, y=20, width=90, height=40)
 
         self.button_engine_toggle = tk.Button(master=self.window,
                                               background='green',
-                                              command=self.button_engine_toggle_click)
-        self.button_engine_toggle.place(x=220, y=70, width=60, height=40)
+                                              command=self.button_engine_toggle_click,
+                                              image=self.images.get('player_vs_player'))
+        self.button_engine_toggle.place(x=220, y=70, width=90, height=40)
+
+    def update_game_mode_button(self, state):
+        self.button_engine_toggle.config(image=self.images.get(state))
 
     def show_move(self, index, player):
         self.list_fields[index].config(image=self.images.get(player))
-        self.label_current_player.config(text=player,
-                                         background= '#c11a94' if player == 'X' else '#ffbe4e')
+        next_player = ('X', '#5C2CAa')  if player == 'O' else ('O', '#A00000')
+        self.label_current_player.config(text=next_player[0],
+                                         background=next_player[1])
 
     def button_field_click(self, index):
         self.controller.field_click(index)

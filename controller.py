@@ -6,28 +6,35 @@ class Controller(object):
 
         self.current_player = 'X'
         self.winner = (False, None)
-        self.engine_enabled = False
+        self.game_mode = 'player_vs_player'
 
     def move(self, index):
-        print(f'Move execution at {index}')
-        if not self.winner[0]:
+        if not self.winner[0] and self.board.board[index] == ' ':
+            print(f'Move execution at {index}')
             if self.current_player == 'X':
                 self.board.add_piece(index, 'X')
-                self.gui.show_move(index, 'O')
+                self.gui.show_move(index, 'X')
                 self.current_player = 'O'
             else:
                 self.board.add_piece(index, 'O')
-                self.gui.show_move(index, 'X')
+                self.gui.show_move(index, 'O')
                 self.current_player = 'X'
             self.winner = self.board.check_win()
-
+        else:
+            print('Invalid move')
 
     def button_engine_status_toggle(self):
-        self.engine_enabled = not self.engine_enabled
+        if self.game_mode == 'player_vs_player':
+            self.game_mode = 'player_vs_engine'
+        elif self.game_mode == 'player_vs_engine':
+            self.game_mode = 'engine_vs_engine'
+        elif self.game_mode == 'engine_vs_engine':
+            self.game_mode = 'player_vs_player'
+        self.gui.update_game_mode_button(self.game_mode)
 
     def field_click(self, index):
         self.move(index)
-        if self.engine_enabled and not self.winner[0]:
+        if 'engine' in self.game_mode and not self.winner[0]:
             self.engine.move(self.board, self.current_player)
 
     def start_gui(self):

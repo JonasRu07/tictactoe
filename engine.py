@@ -22,23 +22,15 @@ class Engine(object):
         self.colour = 'ERROR'
 
     def move(self, start_position, start_as):
-        print('Move generation')
+        print('Engine -> move generation')
         self.colour = 'X' if start_as == 'O' else 'O'
         time_1 = time.time()
         start_move = Move(None, start_position, start_position.check_win()[0], start_position.is_draw(), self.colour)
         self.minimax_alg(start_move, 10, float('-inf'), float('inf'), True)
-        print(f'Minmax completed in {round(time.time() - time_1, 4)}')
+        print(f'Engine -> minmax completed in {round(time.time() - time_1, 4)}')
 
-        moves = sorted(start_move.parent_of, key=lambda x: x.evaluation)
-
-
-        for move in moves:
-            print(f'The move has an evaluation of {move.evaluation} and will be played at {move.index}')
-
-        move_out = moves[-1]
-
+        move_out = sorted(start_move.parent_of, key=lambda x: x.evaluation)[-1]
         print(f'From {start_position.board} to {move_out.board.board} with piece added at {move_out.index}')
-
         self.controller.move(move_out.index)
 
     def gen_legal_moves(self, move, colour):
@@ -82,14 +74,11 @@ class Engine(object):
         return_value = 5
         if win[0]:
             if win[1] == current_colour:
-                print('YAY we won')
                 return_value = 100 + how_early
             else:
-                print("Noo we lost")
                 return_value = -10 - how_early
         if position.is_draw():
             return_value = 0
-        print(return_value, big_small)
         return return_value * big_small
 
     def set_controller(self, ref_controller):

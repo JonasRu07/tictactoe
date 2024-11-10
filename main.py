@@ -3,6 +3,7 @@ from board import Board
 from gui import GUI
 from engine import Engine
 
+#TODO: FIX X.png, 3x 3px space 1x 2px space
 
 board = Board()
 controller = Controller()

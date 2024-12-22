@@ -1,6 +1,9 @@
 import tkinter as tk
+from tkinter import PhotoImage
 
-from PIL import Image, ImageTk
+from PIL import Image
+
+
 class GUI(object):
     def __init__(self):
         self.controller = None
@@ -11,12 +14,12 @@ class GUI(object):
         self.window.config(background='#e8d5b5')
         self.images = {
             'field' : None,
-            'board_frame' : ImageTk.PhotoImage(Image.open('./images/board_frame.png')),
-            'X' : ImageTk.PhotoImage(Image.open('./images/x.png')),
-            'O' : ImageTk.PhotoImage(Image.open('./images/o.png')),
-            'player_vs_player' : ImageTk.PhotoImage(Image.open('./images/player_vs_player.png')),
-            'player_vs_engine' : ImageTk.PhotoImage(Image.open('./images/player_vs_engine.png')),
-            'engine_vs_engine' : ImageTk.PhotoImage(Image.open('./images/engine_vs_engine.png'))
+            'board_frame' : tk.PhotoImage(file='./images/board_frame.png'),
+            'X' : PhotoImage(file='./images/x.png'),
+            'O' : PhotoImage(file='./images/o.png'),
+            'player_vs_player' : PhotoImage(file='./images/player_vs_player.png'),
+            'player_vs_engine' : PhotoImage(file='./images/player_vs_engine.png'),
+            'engine_vs_engine' : PhotoImage(file='./images/engine_vs_engine.png')
             }
 
         self.frame_fields = tk.Frame(master=self.window,
@@ -67,4 +70,3 @@ class GUI(object):
 
     def start(self):
         self.window.mainloop()
-

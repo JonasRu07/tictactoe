@@ -10,7 +10,7 @@ class Controller(object):
 
     def move(self, index):
         if not self.winner[0] and self.board.board[index] == ' ':
-            print(f'Move execution at {index}')
+            print(f'Move execution at {index} as {self.current_player}')
             if self.current_player == 'X':
                 self.board.add_piece(index, 'X')
                 self.gui.show_move(index, 'X')
@@ -20,6 +20,10 @@ class Controller(object):
                 self.gui.show_move(index, 'O')
                 self.current_player = 'X'
             self.winner = self.board.check_win()
+            if self.winner[0]:
+                self.gui.update_game_end_label(self.winner[1])
+            if self.board.is_draw():
+                self.gui.update_game_end_label(None)
         else:
             print('Invalid move')
 

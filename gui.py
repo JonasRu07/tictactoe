@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage
 
-from PIL import Image
-
 
 class GUI(object):
     def __init__(self):
@@ -41,7 +39,7 @@ class GUI(object):
         self.label_current_player = tk.Label(master=self.window,
                                              text='X',
                                              background='#5C2CAa',
-                                              font= 'Aral, 30')
+                                             font= 'Aral, 30')
         self.label_current_player.place(x=220, y=20, width=90, height=40)
 
         self.button_engine_toggle = tk.Button(master=self.window,
@@ -50,8 +48,18 @@ class GUI(object):
                                               image=self.images.get('player_vs_player'))
         self.button_engine_toggle.place(x=220, y=70, width=90, height=40)
 
+        self.label_game_end = tk.Label(master=self.window,
+                                     background='lightblue')
+        self.label_game_end.place(x=220, y=120, width=90, height=40)
+
     def update_game_mode_button(self, state):
         self.button_engine_toggle.config(image=self.images.get(state))
+
+    def update_game_end_label(self, winner: str | None):
+        if winner:
+            self.label_game_end.config(image= self.images[winner])
+        else:
+            self.label_game_end.config(text='DRAW')
 
     def show_move(self, index, player):
         self.list_fields[index].config(image=self.images.get(player))

@@ -4,7 +4,6 @@ from gui import GUI
 from engine import Engine
 
 #TODO: FIX X.png, 3x 3px space 1x 2px space
-#TODO: Show winner/draw
 
 if __name__ == '__main__':
     board = Board()

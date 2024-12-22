@@ -20,17 +20,19 @@ class Engine(object):
 
         self.current_boards = []
         self.colour = 'ERROR'
+        self.moves_considered = 0
 
     def move(self, start_position, start_as):
+        self.moves_considered = 0
         print('Engine -> move generation')
         self.colour = 'X' if start_as == 'O' else 'O'
         time_1 = time.time()
         start_move = Move(None, start_position, start_position.check_win()[0], start_position.is_draw(), self.colour)
         self.minimax_alg(start_move, 10, float('-inf'), float('inf'), True)
-        print(f'Engine -> minmax completed in {round(time.time() - time_1, 4)}')
+        print(f'Engine -> minmax completed in {round(time.time() - time_1, 4)}, considered {self.moves_considered} possible moves')
 
         move_out = sorted(start_move.parent_of, key=lambda x: x.evaluation)[-1]
-        print(f'From {start_position.board} to {move_out.board.board} with piece added at {move_out.index}')
+        print(f'Engine -> From {start_position.board} to {move_out.board.board} with piece added at {move_out.index}')
         self.controller.move(move_out.index)
 
     def gen_legal_moves(self, move, colour):
@@ -43,6 +45,7 @@ class Engine(object):
                 move.parent_of.append(new_move)
 
     def minimax_alg(self, move, depth, alpha, beta, maximising_player):
+        self.moves_considered += 1
         if depth == 0 or move.board.check_win()[0] or move.board.is_draw():
             return self.evaluation(position=move.board, current_colour='green', maximising=maximising_player, how_early=depth)
         if maximising_player:

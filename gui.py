@@ -57,7 +57,7 @@ class GUI(object):
 
     def update_game_end_label(self, winner: str | None):
         if winner:
-            self.label_game_end.config(image= self.images[winner])
+            self.label_game_end.config(text=winner)
         else:
             self.label_game_end.config(text='DRAW')
 

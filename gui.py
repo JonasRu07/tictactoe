@@ -52,6 +52,18 @@ class GUI(object):
                                      background='lightblue')
         self.label_game_end.place(x=220, y=120, width=90, height=40)
 
+        self.window.bind('<Return>', self.restart_activated)
+
+    def restart_activated(self, event):
+        self.controller.restart()
+
+    def total_reload(self):
+        for field in self.list_fields:
+            field.config(image='')
+        self.button_engine_toggle.config(image=self.images['player_vs_player'])
+        self.label_game_end.config(text='')
+
+
     def update_game_mode_button(self, state):
         self.button_engine_toggle.config(image=self.images.get(state))
 

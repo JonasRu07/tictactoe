@@ -26,3 +26,6 @@ class Board(object):
               return True
         else:
             return False
+
+    def reset(self):
+        self.__init__()

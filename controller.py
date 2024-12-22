@@ -27,6 +27,12 @@ class Controller(object):
         else:
             print('Invalid move')
 
+    def restart(self):
+        self.board.reset()
+        self.current_player = 'X'
+        self.winner = (False, None)
+        self.gui.total_reload()
+
     def button_engine_status_toggle(self):
         if self.game_mode == 'player_vs_player':
             self.game_mode = 'player_vs_engine'

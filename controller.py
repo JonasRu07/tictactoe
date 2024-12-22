@@ -1,3 +1,5 @@
+from time import sleep
+
 class Controller(object):
     def __init__(self):
         self.board = None
@@ -44,8 +46,14 @@ class Controller(object):
 
     def field_click(self, index):
         self.move(index)
-        if 'engine' in self.game_mode and not self.winner[0]:
+        if self.game_mode == 'player_vs_engine':
             self.engine.move(self.board, self.current_player)
+        elif self.game_mode == 'engine_vs_engine':
+            while True:
+                if self.winner[0] or self.board.is_draw():
+                    break
+                self.engine.move(self.board, self.current_player)
+
 
     def start_gui(self):
         self.gui.start()
